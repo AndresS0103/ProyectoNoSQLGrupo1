@@ -1,3 +1,4 @@
+// Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -11,27 +12,27 @@ const hostname = 'http://localhost';
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
-mongoose.connect(urlNube, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Base de datos en la nube conectada...'))
-.catch((error) => console.log('Error al conectar a la base de datos: ' + error));
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
+mongoose.connect(urlNube)
+    .then(() => console.log('Base de datos en la nube conectada...'))
+    .catch((error) => console.log('Error al conectar a la base de datos: ' + error));
 
 // Esquema para Notificaciones
 const SchemaNotificaciones = new mongoose.Schema({
     notificacion_id: String,
+    // ID del usuario al que pertenece la notificación
     usuario_id: String, 
+    // Tipo de notificación (nuevo_seguidor, nuevo_comentario)
     tipo: String, 
+    // ID relacionado con la notificación (comentario, publicación)
     referencia_id: String, 
-    leido: Boolean, 
-    fecha_notificacion: Date
+     // Estado de lectura de la notificación
+    leido: Boolean,
+    // Fecha en la que se creó la notificación
+    fecha_notificacion: Date 
 });
 
-const Notificaciones = mongoose.model('Notificaciones', SchemaNotificaciones);
-
+const Notificaciones = mongoose.model('Notificaciones', SchemaNotificaciones, 'Notificaciones'); 
 
 // Ruta GET para obtener todas las notificaciones
 app.get('/Notificaciones', async (req, res) => {
@@ -101,4 +102,9 @@ app.delete('/Notificaciones/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar la notificación: " + error.message });
     }
+});
+
+// Inicializar el servidor
+app.listen(port, () => {
+    console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });

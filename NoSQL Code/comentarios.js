@@ -1,3 +1,4 @@
+// Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -11,25 +12,25 @@ const hostname = 'http://localhost';
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
-mongoose.connect(urlNube, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Base de datos en la nube conectada...'))
-.catch((error) => console.log('Error al conectar a la base de datos: ' + error));
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
+mongoose.connect(urlNube)
+    .then(() => console.log('Base de datos en la nube conectada...'))
+    .catch((error) => console.log('Error al conectar a la base de datos: ' + error));
 
 // Esquema para Comentarios
 const SchemaComentarios = new mongoose.Schema({
     comentario_id: String,
+    // ID de la publicación a la que pertenece el comentario
     publicacion_id: String, 
+    // ID del usuario que hizo el comentario
     usuario_id: String, 
+    // Contenido del comentario
     contenido: String,
-    fecha_comentario: Date
+    // Fecha en la que se creó el comentario
+    fecha_comentario: Date 
 });
 
-const Comentarios = mongoose.model('Comentarios', SchemaComentarios);
+const Comentarios = mongoose.model('Comentarios', SchemaComentarios, 'Comentarios'); 
 
 // Ruta GET para obtener todos los comentarios
 app.get('/Comentarios', async (req, res) => {
@@ -100,9 +101,7 @@ app.delete('/Comentarios/:id', async (req, res) => {
     }
 });
 
-
 // Inicializar el servidor
 app.listen(port, () => {
     console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });
-

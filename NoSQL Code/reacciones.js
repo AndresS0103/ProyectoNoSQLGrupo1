@@ -1,3 +1,4 @@
+// Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -11,25 +12,24 @@ const hostname = 'http://localhost';
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
-mongoose.connect(urlNube, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Base de datos en la nube conectada...'))
-.catch((error) => console.log('Error al conectar a la base de datos: ' + error));
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
+mongoose.connect(urlNube)
+    .then(() => console.log('Base de datos en la nube conectada...'))
+    .catch((error) => console.log('Error al conectar a la base de datos: ' + error));
 
 // Esquema para Reacciones
 const SchemaReacciones = new mongoose.Schema({
     reaccion_id: String,
+    // ID de la publicación a la que pertenece la reacción
     publicacion_id: String, 
+    // ID del usuario que realizó la reacción
     usuario_id: String, 
-    tipo_reaccion: String, 
+     // Tipo de reacción (me gusta, me encanta)
+    tipo_reaccion: String,
     fecha_reaccion: Date
 });
 
-const Reacciones = mongoose.model('Reacciones', SchemaReacciones);
+const Reacciones = mongoose.model('Reacciones', SchemaReacciones, 'Reacciones'); 
 
 // Ruta GET para obtener todas las reacciones
 app.get('/Reacciones', async (req, res) => {
@@ -73,7 +73,7 @@ app.post('/Reacciones', async (req, res) => {
 
 // Ruta PUT para actualizar una reacción por ID
 app.put('/Reacciones/:id', async (req, res) => {
-    const { tipo_reaccion } = req.body; 
+    const { tipo_reaccion } = req.body;
 
     try {
         const reaccionActualizada = await Reacciones.findOneAndUpdate(
@@ -98,4 +98,9 @@ app.delete('/Reacciones/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar la reacción: " + error.message });
     }
+});
+
+// Inicializar el servidor
+app.listen(port, () => {
+    console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });

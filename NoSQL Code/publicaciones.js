@@ -12,15 +12,10 @@ const hostname = 'http://localhost';
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
-mongoose.connect(urlNube, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Base de datos en la nube conectada...'))
-.catch((error) => console.log('Error al conectar a la base de datos: ' + error));
-
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
+mongoose.connect(urlNube)
+    .then(() => console.log('Base de datos en la nube conectada...'))
+    .catch((error) => console.log('Error al conectar a la base de datos: ' + error));
 
 // Esquema para Publicaciones
 const SchemaPublicaciones = new mongoose.Schema({
@@ -29,13 +24,13 @@ const SchemaPublicaciones = new mongoose.Schema({
     contenido: String,
     fecha_publicacion: Date,
     imagen: String,
-    me_gusta: [String], // Array de usuarios que han dado "me gusta"
-    comentarios: [String] // IDs de comentarios
+    // Lista de usuarios que han dado "me gusta"
+    me_gusta: [String], 
+    // Lista de comentarios en la publicación
+    comentarios: [String] 
 });
 
-const Publicaciones = mongoose.model('Publicaciones', SchemaPublicaciones);
-
-
+const Publicaciones = mongoose.model('Publicaciones', SchemaPublicaciones, 'Publicaciones');
 // Ruta GET para obtener todas las publicaciones
 app.get('/Publicaciones', async (req, res) => {
     try {
@@ -111,4 +106,3 @@ app.delete('/Publicaciones/:id', async (req, res) => {
 app.listen(port, () => {
     console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });
-

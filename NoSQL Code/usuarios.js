@@ -8,12 +8,10 @@ const app = express();
 const port = 3002;
 const hostname = 'http://localhost';
 
-// Permitir formato JSON en las solicitudes
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
 mongoose.connect(urlNube, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -33,9 +31,9 @@ const SchemaUsuarios = new mongoose.Schema({
     seguidos: [String]
 });
 
-const Usuarios = mongoose.model('Usuarios', SchemaUsuarios);
+const Usuarios = mongoose.model('Usuarios', SchemaUsuarios, 'Usuarios'); // Usar colección existente
 
-// Ruta GET para obtener todos los usuarios
+// Ruta GET para obtener el listado de todos los usuarios
 app.get('/Usuarios', async (req, res) => {
     try {
         const usuarios = await Usuarios.find();
@@ -45,7 +43,7 @@ app.get('/Usuarios', async (req, res) => {
     }
 });
 
-// Ruta GET para obtener un usuario por ID
+// Ruta GET para obtener un usuario por su usuario_id
 app.get('/Usuarios/:id', async (req, res) => {
     try {
         const usuario = await Usuarios.findOne({ usuario_id: req.params.id });
@@ -78,7 +76,7 @@ app.post('/Usuarios', async (req, res) => {
     }
 });
 
-// Ruta PUT para actualizar un usuario por ID
+// Ruta PUT para actualizar un usuario por su usuario_id
 app.put('/Usuarios/:id', async (req, res) => {
     const { nombre, email, biografia, foto_perfil, seguidores, seguidos } = req.body;
 
@@ -88,7 +86,7 @@ app.put('/Usuarios/:id', async (req, res) => {
             { nombre, email, biografia, foto_perfil, seguidores, seguidos },
             { new: true }
         );
-        
+
         if (!usuarioActualizado) return res.status(404).json({ message: "Usuario no encontrado" });
         res.json(usuarioActualizado);
     } catch (error) {
@@ -96,7 +94,7 @@ app.put('/Usuarios/:id', async (req, res) => {
     }
 });
 
-// Ruta DELETE para eliminar un usuario por ID
+// Ruta DELETE para eliminar un usuario por su usuario_id
 app.delete('/Usuarios/:id', async (req, res) => {
     try {
         const usuarioEliminado = await Usuarios.findOneAndDelete({ usuario_id: req.params.id });

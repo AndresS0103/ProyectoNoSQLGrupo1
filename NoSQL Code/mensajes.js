@@ -1,3 +1,4 @@
+// Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -11,26 +12,27 @@ const hostname = 'http://localhost';
 app.use(express.json());
 
 // Conexión a MongoDB en la nube
-//cambiar esto por la conexion que tengo en el atlas
-const urlNube = "mongodb+srv://usuario:contraseña@cluster.mongodb.net/RedSocialDB?retryWrites=true&w=majority";
-mongoose.connect(urlNube, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Base de datos en la nube conectada...'))
-.catch((error) => console.log('Error al conectar a la base de datos: ' + error));
+const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
+mongoose.connect(urlNube)
+    .then(() => console.log('Base de datos en la nube conectada...'))
+    .catch((error) => console.log('Error al conectar a la base de datos: ' + error));
 
 // Esquema para Mensajes
 const SchemaMensajes = new mongoose.Schema({
     mensaje_id: String,
+    // ID del usuario que envía el mensaje
     emisor_id: String, 
+    // ID del usuario que recibe el mensaje
     receptor_id: String, 
-    contenido: String,
-    fecha_envio: Date,
+    // Contenido del mensaje
+    contenido: String, 
+    // Fecha de envío del mensaje
+    fecha_envio: Date, 
+    // Estado de lectura (true/false)
     leido: Boolean 
 });
 
-const Mensajes = mongoose.model('Mensajes', SchemaMensajes);
+const Mensajes = mongoose.model('Mensajes', SchemaMensajes, 'Mensajes'); 
 
 // Ruta GET para obtener todos los mensajes
 app.get('/Mensajes', async (req, res) => {
@@ -75,7 +77,7 @@ app.post('/Mensajes', async (req, res) => {
 
 // Ruta PUT para actualizar el estado de lectura de un mensaje por ID
 app.put('/Mensajes/:id', async (req, res) => {
-    const { leido } = req.body; 
+    const { leido } = req.body;
 
     try {
         const mensajeActualizado = await Mensajes.findOneAndUpdate(
@@ -100,4 +102,9 @@ app.delete('/Mensajes/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar el mensaje: " + error.message });
     }
+});
+
+// Inicializar el servidor
+app.listen(port, () => {
+    console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });

@@ -103,19 +103,19 @@ const Sidebar = () => {
           <li>
             <Link to="/guardados" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
               🔖
-              <span>Guardados</span>
+              <span>Mensajes</span>
             </Link>
           </li>
           <li>
             <Link to="/perfil" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
               👤
-              <span>Perfil</span>
+              <span>Seguidores</span>
             </Link>
           </li>
           <li>
             <Link to="/configuracion" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
               ⚙️
-              <span>Configuración</span>
+              <span>Reportes</span>
             </Link>
           </li>
         </ul>

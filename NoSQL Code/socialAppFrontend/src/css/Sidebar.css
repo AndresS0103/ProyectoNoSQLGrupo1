@@ -1,0 +1,209 @@
+/* Variables de color y efectos */
+:root {
+    --primary-color: #1a73e8;
+    --primary-hover: #1557b0;
+    --background-color: #ffffff;
+    --border-color: #e1e4e8;
+    --text-primary: #24292e;
+    --text-secondary: #586069;
+    --hover-bg: #f6f8fa;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+  }
+  
+  /* Contenedor principal del sidebar */
+  .sidebar {
+    width: 300px;
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 80px);
+    padding: 24px;
+    background: var(--background-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    overflow-y: auto;
+    transition: var(--transition);
+  }
+  
+  .sidebar:hover {
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Selector de usuarios */
+  .user-selector select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: var(--transition);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23586069' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+  }
+  
+  .user-selector select:hover {
+    border-color: var(--primary-color);
+  }
+  
+  .user-selector select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+  }
+  
+  /* Sección del perfil */
+  .profile-section {
+    padding: 24px 0;
+    border-bottom: 2px solid var(--border-color);
+    margin-top: 16px;
+  }
+  
+  .profile-header {
+    text-align: center;
+  }
+  
+  .profile-header img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+    padding: 3px;
+    background-color: var(--background-color);
+    transition: var(--transition);
+  }
+  
+  .profile-header img:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .profile-header h2 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  
+  .profile-header p {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  
+  /* Estadísticas */
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 24px 0;
+    padding: 16px;
+    background-color: var(--hover-bg);
+    border-radius: 12px;
+    transition: var(--transition);
+  }
+  
+  .stats:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .stats > div {
+    text-align: center;
+    padding: 0 12px;
+  }
+  
+  .stats .font-bold {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+  }
+  
+  .stats .text-sm {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  /* Menú de navegación */
+  .navigation-menu {
+    margin-top: 24px;
+  }
+  
+  .navigation-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navigation-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: var(--transition);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .navigation-menu li a:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+    transform: translateX(4px);
+  }
+  
+  .navigation-menu li a span:first-child {
+    font-size: 1.4rem;
+    min-width: 28px;
+    text-align: center;
+  }
+  
+  /* Scrollbar personalizado */
+  .sidebar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: var(--hover-bg);
+    border-radius: 4px;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background: #cfd8dc;
+    border-radius: 4px;
+    transition: var(--transition);
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background: #b0bec5;
+  }
+  
+  /* Media queries */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      margin-bottom: 24px;
+      padding: 20px;
+    }
+  
+    .profile-header img {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .stats {
+      padding: 12px;
+    }
+  }

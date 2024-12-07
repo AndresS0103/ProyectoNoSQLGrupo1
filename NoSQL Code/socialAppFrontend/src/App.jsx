@@ -1,33 +1,27 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Publicaciones from './components/Publicaciones';
+import Usuarios from './components/Usuarios';
+import Sidebar from './components/Sidebar';
+import './css/App.css';
 
 function App() {
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    axios('http://localhost:3002/Usuarios').then(response=>{
-      if(response.status === 200) {
-        console.log(response.data);
-        setData(response.data)
-      }
-    })
-    .catch(err=>{
-
-    })
-  }, [])
-
   return (
-    <>
-      <p>Bienvenido a la Red Social con NoSQL</p>
-      {
-        data.length > 0 && data.map((item, index) =>
-          <>
-            <div key={index}>{item.email}</div> <br />
-          </>
-        )
-      }
-    </>
-  )
+    <Router>
+      <div className="app-container">
+        <Navbar />
+        <div className="content">
+          <Sidebar />
+          <main className="main-feed">
+            <Routes>
+              <Route path="/" element={<Publicaciones />} />
+              <Route path="/usuarios" element={<Usuarios />} />
+            </Routes>
+          </main>
+        </div>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -3,7 +3,7 @@ import axios from 'axios';
 import PostCard from './PostCard';
 import '../css/Publicaciones.css';
 
-function Publicaciones() {
+function Publicaciones({ usuarioActivo }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function Publicaciones() {
   return (
     <div className="publicaciones-container">
       {posts.map((post) => (
-        <PostCard key={post.publicacion_id} post={post} />
+        <PostCard key={post.publicacion_id} post={post} usuarioActivo={usuarioActivo} />
       ))}
     </div>
   );

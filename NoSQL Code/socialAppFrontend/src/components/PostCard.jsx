@@ -2,29 +2,38 @@ import { useState } from 'react';
 import axios from 'axios';
 import '../css/PostCard.css';
 
-function PostCard({ post }) {
+function PostCard({ post, usuarioActivo }) {
   const [likes, setLikes] = useState(post.me_gusta.length);
-  const [liked, setLiked] = useState(post.me_gusta.includes('currentUserId')); // Reemplaza 'currentUserId' con el ID del usuario actual.
-  const [comments, setComments] = useState([]); // Lista de comentarios
-  const [showComments, setShowComments] = useState(false); // Mostrar u ocultar comentarios
-  const [newComment, setNewComment] = useState(''); // Nuevo comentario
+  const [liked, setLiked] = useState(post.me_gusta.includes(usuarioActivo?.usuario_id));
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  //comentario que se va a editar
+  const [editingComment, setEditingComment] = useState(null); 
+  //contenido del comentario que se está editando
+  const [editingContent, setEditingContent] = useState(''); 
 
   const handleLike = async () => {
+    if (!usuarioActivo) {
+      alert('Selecciona un usuario para reaccionar.');
+      return;
+    }
+
     try {
       if (liked) {
         await axios.put(`http://localhost:3004/Reacciones/${post.publicacion_id}/remove-like`, {
-          usuario_id: 'currentUserId', // Reemplaza con el ID del usuario actual
+          usuario_id: usuarioActivo.usuario_id,
         });
         setLikes(likes - 1);
       } else {
         await axios.put(`http://localhost:3004/Reacciones/${post.publicacion_id}/add-like`, {
-          usuario_id: 'currentUserId', // Reemplaza con el ID del usuario actual
+          usuario_id: usuarioActivo.usuario_id,
         });
         setLikes(likes + 1);
       }
       setLiked(!liked);
     } catch (error) {
-      console.error('Error al actualizar el "Me gusta":', error.message);
+      console.error('Error al actualizar "Me gusta":', error.message);
     }
   };
 
@@ -41,27 +50,72 @@ function PostCard({ post }) {
 
   const handleToggleComments = () => {
     if (!showComments) {
-      fetchComments(); // Cargar comentarios al abrir
+      fetchComments();
     }
     setShowComments(!showComments);
   };
 
   const handleAddComment = async () => {
+    if (!usuarioActivo) {
+      alert('Selecciona un usuario para comentar.');
+      return;
+    }
+
     try {
-      const comentarioId = `comentario_${Date.now()}`; // Generar un ID único
+      const comentarioId = `comentario_${Date.now()}`;
       const newCommentData = {
         comentario_id: comentarioId,
         publicacion_id: post.publicacion_id,
-        usuario_id: 'currentUserId', // Reemplaza con el ID del usuario actual
+        usuario_id: usuarioActivo.usuario_id,
         contenido: newComment,
         fecha_comentario: new Date(),
       };
       await axios.post('http://localhost:3005/Comentarios', newCommentData);
-      setComments([...comments, newCommentData]); // Actualizar la lista localmente
-      setNewComment(''); // Limpiar el campo de texto
+      setComments([...comments, newCommentData]);
+      setNewComment('');
     } catch (error) {
       console.error('Error al agregar comentario:', error.message);
     }
+  };
+
+  const handleEditComment = async () => {
+    if (!editingComment) return;
+
+    try {
+      const updatedComment = {
+        ...editingComment,
+        contenido: editingContent,
+      };
+      await axios.put(`http://localhost:3005/Comentarios/${editingComment.comentario_id}`, updatedComment);
+      setComments(
+        comments.map((comment) =>
+          comment.comentario_id === editingComment.comentario_id ? updatedComment : comment
+        )
+      );
+      setEditingComment(null);
+      setEditingContent('');
+    } catch (error) {
+      console.error('Error al editar comentario:', error.message);
+    }
+  };
+
+  const handleDeleteComment = async (comentarioId) => {
+    try {
+      await axios.delete(`http://localhost:3005/Comentarios/${comentarioId}`);
+      setComments(comments.filter((comment) => comment.comentario_id !== comentarioId));
+    } catch (error) {
+      console.error('Error al eliminar comentario:', error.message);
+    }
+  };
+
+  const startEditing = (comment) => {
+    setEditingComment(comment);
+    setEditingContent(comment.contenido);
+  };
+
+  const cancelEditing = () => {
+    setEditingComment(null);
+    setEditingContent('');
   };
 
   return (
@@ -98,10 +152,29 @@ function PostCard({ post }) {
           <div className="comments-list">
             {comments.map((comment) => (
               <div key={comment.comentario_id} className="comment-item">
-                <strong>{comment.usuario_id}:</strong> {comment.contenido}
-                <span className="comment-date">
-                  {new Date(comment.fecha_comentario).toLocaleString()}
-                </span>
+                {editingComment?.comentario_id === comment.comentario_id ? (
+                  <div>
+                    <textarea
+                      value={editingContent}
+                      onChange={(e) => setEditingContent(e.target.value)}
+                    ></textarea>
+                    <button onClick={handleEditComment}>Guardar</button>
+                    <button onClick={cancelEditing}>Cancelar</button>
+                  </div>
+                ) : (
+                  <>
+                    <strong>{comment.usuario_id}:</strong> {comment.contenido}
+                    <span className="comment-date">
+                      {new Date(comment.fecha_comentario).toLocaleString()}
+                    </span>
+                    {usuarioActivo?.usuario_id === comment.usuario_id && (
+                      <div className="comment-actions">
+                        <button onClick={() => startEditing(comment)}>Editar</button>
+                        <button onClick={() => handleDeleteComment(comment.comentario_id)}>Eliminar</button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             ))}
           </div>

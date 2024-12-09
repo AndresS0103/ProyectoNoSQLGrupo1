@@ -1,15 +1,17 @@
 // Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 
 const app = express();
 
 // Puerto y host
-const port = 3002;
+const port = 3004;
 const hostname = 'http://localhost';
 
 // Permitir formato JSON en las solicitudes
 app.use(express.json());
+app.use(cors())
 
 // Conexión a MongoDB en la nube
 const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
@@ -99,6 +101,42 @@ app.delete('/Reacciones/:id', async (req, res) => {
         res.status(500).json({ message: "Error al eliminar la reacción: " + error.message });
     }
 });
+
+// Ruta PUT para agregar un "Me gusta"
+app.put('/Reacciones/:publicacionId/add-like', async (req, res) => {
+    const { usuario_id } = req.body;
+    const { publicacionId } = req.params;
+  
+    try {
+      const publicacion = await Reacciones.findOneAndUpdate(
+        { publicacion_id: publicacionId },
+        { $addToSet: { me_gusta: usuario_id } }, // Asegura que el usuario_id no se duplique
+        { new: true }
+      );
+      if (!publicacion) return res.status(404).json({ message: "Publicación no encontrada" });
+      res.json(publicacion);
+    } catch (error) {
+      res.status(500).json({ message: "Error al agregar 'Me gusta': " + error.message });
+    }
+  });
+  
+  // Ruta PUT para eliminar un "Me gusta"
+  app.put('/Reacciones/:publicacionId/remove-like', async (req, res) => {
+    const { usuario_id } = req.body;
+    const { publicacionId } = req.params;
+  
+    try {
+      const publicacion = await Reacciones.findOneAndUpdate(
+        { publicacion_id: publicacionId },
+        { $pull: { me_gusta: usuario_id } }, // Elimina el usuario_id de la lista
+        { new: true }
+      );
+      if (!publicacion) return res.status(404).json({ message: "Publicación no encontrada" });
+      res.json(publicacion);
+    } catch (error) {
+      res.status(500).json({ message: "Error al eliminar 'Me gusta': " + error.message });
+    }
+  });
 
 // Inicializar el servidor
 app.listen(port, () => {

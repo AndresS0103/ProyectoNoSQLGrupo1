@@ -1,15 +1,17 @@
 // Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 
 const app = express();
 
 // Puerto y host
-const port = 3002;
+const port = 3005;
 const hostname = 'http://localhost';
 
 // Permitir formato JSON en las solicitudes
 app.use(express.json());
+app.use(cors())
 
 // Conexión a MongoDB en la nube
 const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
@@ -32,15 +34,19 @@ const SchemaComentarios = new mongoose.Schema({
 
 const Comentarios = mongoose.model('Comentarios', SchemaComentarios, 'Comentarios'); 
 
-// Ruta GET para obtener todos los comentarios
+// Ruta GET para obtener los comentarios de una publicación específica
 app.get('/Comentarios', async (req, res) => {
+    const { publicacion_id } = req.query;
+
     try {
-        const comentarios = await Comentarios.find();
+        const comentarios = await Comentarios.find({ publicacion_id });
         res.json(comentarios);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener los comentarios: " + error.message });
     }
 });
+
+
 
 // Ruta GET para obtener un comentario por ID
 app.get('/Comentarios/:id', async (req, res) => {

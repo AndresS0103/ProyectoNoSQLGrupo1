@@ -1,14 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
 // Puerto y host
-const port = 3002;
+const port = 3007;
 const hostname = 'http://localhost';
 
 // Permitir formato JSON en las solicitudes
 app.use(express.json());
+app.use(cors());
 
 // Conexión a MongoDB en la nube
 const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";
@@ -39,16 +41,21 @@ app.get('/Seguidores', async (req, res) => {
     }
 });
 
-// Ruta GET para obtener un seguimiento específico por ID
-app.get('/Seguidores/:id', async (req, res) => {
+// Ruta GET para obtener todos los seguidores de un usuario específico
+app.get('/Seguidores/:usuario_id', async (req, res) => {
     try {
-        const seguidor = await Seguidores.findOne({ seguidor_id: req.params.id });
-        if (!seguidor) return res.status(404).json({ message: "Seguimiento no encontrado" });
-        res.json(seguidor);
+        // Filtra por seguido_id (los usuarios que siguen al usuario actual)
+        const seguidores = await Seguidores.find({ seguido_id: req.params.usuario_id });
+        if (!seguidores || seguidores.length === 0) {
+            //Devuelve un array vacío si no hay seguidores
+            return res.json([]); 
+        }
+        res.json(seguidores);
     } catch (error) {
-        res.status(500).json({ message: "Error al obtener el seguimiento: " + error.message });
+        res.status(500).json({ message: "Error al obtener los seguidores: " + error.message });
     }
 });
+
 
 // Ruta POST para crear un nuevo seguimiento
 app.post('/Seguidores', async (req, res) => {

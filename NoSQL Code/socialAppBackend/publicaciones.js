@@ -104,7 +104,43 @@ app.delete('/Publicaciones/:id', async (req, res) => {
     }
 });
 
+app.put('/Publicaciones/:publicacionId/add-like', async (req, res) => {
+    const { usuario_id } = req.body; // ID del usuario que dio "me gusta"
+    const { publicacionId } = req.params;
+
+    try {
+        const publicacion = await Publicaciones.findOneAndUpdate(
+            { publicacion_id: publicacionId },
+            { $addToSet: { me_gusta: usuario_id } }, // Asegura que no se duplique
+            { new: true }
+        );
+        if (!publicacion) return res.status(404).json({ message: "Publicación no encontrada" });
+        res.json(publicacion); // Devuelve la publicación actualizada
+    } catch (error) {
+        res.status(500).json({ message: "Error al agregar 'Me gusta': " + error.message });
+    }
+});
+
+// Ruta PUT para eliminar un "Me gusta"
+app.put('/Publicaciones/:publicacionId/remove-like', async (req, res) => {
+    const { usuario_id } = req.body; // ID del usuario que quitó "me gusta"
+    const { publicacionId } = req.params;
+
+    try {
+        const publicacion = await Publicaciones.findOneAndUpdate(
+            { publicacion_id: publicacionId },
+            { $pull: { me_gusta: usuario_id } }, // Elimina el usuario_id del array
+            { new: true }
+        );
+        if (!publicacion) return res.status(404).json({ message: "Publicación no encontrada" });
+        res.json(publicacion); // Devuelve la publicación actualizada
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar 'Me gusta': " + error.message });
+    }
+});
+
 // Inicializar el servidor
 app.listen(port, () => {
     console.log(`El servidor se está ejecutando en ${hostname}:${port}`);
 });
+

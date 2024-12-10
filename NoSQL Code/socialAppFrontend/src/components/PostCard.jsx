@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/PostCard.css';
 
@@ -8,34 +9,35 @@ function PostCard({ post, usuarioActivo }) {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
-  //comentario que se va a editar
-  const [editingComment, setEditingComment] = useState(null); 
-  //contenido del comentario que se está editando
-  const [editingContent, setEditingContent] = useState(''); 
+  const [editingComment, setEditingComment] = useState(null);
+  const [editingContent, setEditingContent] = useState('');
+  const navigate = useNavigate();
 
   const handleLike = async () => {
     if (!usuarioActivo) {
-      alert('Selecciona un usuario para reaccionar.');
-      return;
+        alert('Selecciona un usuario para reaccionar.');
+        return;
     }
 
     try {
-      if (liked) {
-        await axios.put(`http://localhost:3004/Reacciones/${post.publicacion_id}/remove-like`, {
-          usuario_id: usuarioActivo.usuario_id,
-        });
-        setLikes(likes - 1);
-      } else {
-        await axios.put(`http://localhost:3004/Reacciones/${post.publicacion_id}/add-like`, {
-          usuario_id: usuarioActivo.usuario_id,
-        });
-        setLikes(likes + 1);
-      }
-      setLiked(!liked);
+        if (liked) {
+            const response = await axios.put(
+                `http://localhost:3003/Publicaciones/${post.publicacion_id}/remove-like`,
+                { usuario_id: usuarioActivo.usuario_id }
+            );
+            setLikes(response.data.me_gusta.length); // Actualiza el estado local con la respuesta del backend
+        } else {
+            const response = await axios.put(
+                `http://localhost:3003/Publicaciones/${post.publicacion_id}/add-like`,
+                { usuario_id: usuarioActivo.usuario_id }
+            );
+            setLikes(response.data.me_gusta.length); // Actualiza el estado local con la respuesta del backend
+        }
+        setLiked(!liked); // Alterna el estado de "me gusta"
     } catch (error) {
-      console.error('Error al actualizar "Me gusta":', error.message);
+        console.error('Error al actualizar "Me gusta":', error.message);
     }
-  };
+};
 
   const fetchComments = async () => {
     try {
@@ -118,6 +120,22 @@ function PostCard({ post, usuarioActivo }) {
     setEditingContent('');
   };
 
+  const handleReport = (tipo, comentarioId = null) => {
+    if (!usuarioActivo) {
+      alert('Selecciona un usuario para reportar.');
+      return;
+    }
+
+    navigate('/reportar', {
+      state: {
+        tipo,
+        publicacionId: post.publicacion_id,
+        comentarioId,
+        usuarioReportante: usuarioActivo.usuario_id,
+      },
+    });
+  };
+
   return (
     <div className="post-card">
       <div className="post-header">
@@ -146,6 +164,9 @@ function PostCard({ post, usuarioActivo }) {
         <button className="comment-button" onClick={handleToggleComments}>
           💬 {comments.length}
         </button>
+        <button className="report-button" onClick={() => handleReport('publicacion')}>
+          🚩 Reportar Publicación
+        </button>
       </div>
       {showComments && (
         <div className="comments-section">
@@ -173,6 +194,12 @@ function PostCard({ post, usuarioActivo }) {
                         <button onClick={() => handleDeleteComment(comment.comentario_id)}>Eliminar</button>
                       </div>
                     )}
+                    <button
+                      className="report-button"
+                      onClick={() => handleReport('comentario', comment.comentario_id)}
+                    >
+                      🚩 Reportar Comentario
+                    </button>
                   </>
                 )}
               </div>

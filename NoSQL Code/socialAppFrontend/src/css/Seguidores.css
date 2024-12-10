@@ -1,0 +1,29 @@
+.seguidores-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .seguidores-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .seguidores-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .seguidores-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .seguidores-list li strong {
+    display: block;
+    color: #555;
+  }
+  

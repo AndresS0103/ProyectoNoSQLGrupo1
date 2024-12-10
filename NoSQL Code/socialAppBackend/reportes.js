@@ -1,15 +1,17 @@
 // Llamado de librerías
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 
 const app = express();
 
 // Puerto y host
-const port = 3002;
+const port = 3006;
 const hostname = 'http://localhost';
 
 // Permitir formato JSON en las solicitudes
 app.use(express.json());
+app.use(cors());
 
 // Conexión a MongoDB en la nube
 const urlNube = "mongodb+srv://AndresS0103:6bnjnTQoHXzfRAgq@proyectoredsocialnosql.qdhat.mongodb.net/RedSocialDB";

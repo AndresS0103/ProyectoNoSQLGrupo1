@@ -8,6 +8,8 @@ const Sidebar = ({ setUsuarioActivo }) => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [conteoSeguidores, setConteoSeguidores] = useState(0);
+  const [conteoSeguidos, setConteoSeguidos] = useState(0);
 
   useEffect(() => {
     fetchUsuarios();
@@ -20,7 +22,8 @@ const Sidebar = ({ setUsuarioActivo }) => {
         setUsuarios(response.data);
         const usuarioPorDefecto = response.data[0]; // Seleccionar el primer usuario por defecto
         setUsuarioSeleccionado(usuarioPorDefecto);
-        setUsuarioActivo(usuarioPorDefecto); // Notificar al componente padre
+        setUsuarioActivo(usuarioPorDefecto);
+        actualizarConteos(usuarioPorDefecto);
         setLoading(false);
       }
     } catch (err) {
@@ -29,10 +32,21 @@ const Sidebar = ({ setUsuarioActivo }) => {
     }
   };
 
+  const actualizarConteos = (usuario) => {
+    if (usuario) {
+      setConteoSeguidores(usuario.seguidores?.length || 0); // Conteo de seguidores
+      setConteoSeguidos(usuario.seguidos?.length || 0); // Conteo de seguidos
+    } else {
+      setConteoSeguidores(0);
+      setConteoSeguidos(0);
+    }
+  };
+
   const handleChangeUser = (event) => {
     const usuario = usuarios.find(user => user.usuario_id === event.target.value);
     setUsuarioSeleccionado(usuario);
-    setUsuarioActivo(usuario); // Notificar al componente padre sobre el cambio
+    setUsuarioActivo(usuario);
+    actualizarConteos(usuario);
   };
 
   if (loading) {
@@ -47,8 +61,8 @@ const Sidebar = ({ setUsuarioActivo }) => {
     <aside className="sidebar">
       {/* Selector de usuarios */}
       <div className="user-selector">
-        <select 
-          value={usuarioSeleccionado?.usuario_id || ''} 
+        <select
+          value={usuarioSeleccionado?.usuario_id || ''}
           onChange={handleChangeUser}
           className="user-dropdown"
         >
@@ -69,6 +83,15 @@ const Sidebar = ({ setUsuarioActivo }) => {
         />
         <h2>{usuarioSeleccionado?.nombre}</h2>
         <p>@{usuarioSeleccionado?.usuario_id}</p>
+        {usuarioSeleccionado?.biografia && (
+          <p className="user-biography">
+            <strong>Bio: </strong> {usuarioSeleccionado.biografia}
+          </p>
+        )}
+        <div className="followers-following">
+          <p><strong>Seguidores:</strong> {conteoSeguidores}</p>
+          <p><strong>Siguiendo:</strong> {conteoSeguidos}</p>
+        </div>
       </div>
 
       {/* Navegación */}
@@ -81,10 +104,7 @@ const Sidebar = ({ setUsuarioActivo }) => {
             <Link to="/usuarios">👥 Usuarios</Link>
           </li>
           <li>
-            <Link to="/guardados">🔖 Mensajes</Link>
-          </li>
-          <li>
-            <Link to="/perfil">👤 Seguidores</Link>
+            <Link to="/seguidores">👤 Seguidores</Link>
           </li>
           <li>
             <Link to="/configuracion">⚙️ Reportes</Link>

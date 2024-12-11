@@ -27,7 +27,7 @@ function Reporte() {
       };
 
       // Enviar el reporte al backend
-      await axios.post('http://localhost:3006/Reportes', newReporte);
+      await axios.post('http://localhost:3000/Reportes', newReporte);
       alert('Reporte enviado con éxito');
       navigate('/'); // Redirigir al usuario a la página principal
     } catch (error) {

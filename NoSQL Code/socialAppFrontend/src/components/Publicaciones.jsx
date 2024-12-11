@@ -12,7 +12,7 @@ function Publicaciones({ usuarioActivo }) {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:3003/Publicaciones');
+      const response = await axios.get('http://localhost:3000/Publicaciones');
       if (response.status === 200) {
         setPosts(response.data);
       }

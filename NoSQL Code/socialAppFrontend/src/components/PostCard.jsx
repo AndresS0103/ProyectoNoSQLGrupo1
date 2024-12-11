@@ -22,13 +22,13 @@ function PostCard({ post, usuarioActivo }) {
     try {
         if (liked) {
             const response = await axios.put(
-                `http://localhost:3003/Publicaciones/${post.publicacion_id}/remove-like`,
+                `http://localhost:3000/Publicaciones/${post.publicacion_id}/remove-like`,
                 { usuario_id: usuarioActivo.usuario_id }
             );
             setLikes(response.data.me_gusta.length); // Actualiza el estado local con la respuesta del backend
         } else {
             const response = await axios.put(
-                `http://localhost:3003/Publicaciones/${post.publicacion_id}/add-like`,
+                `http://localhost:3000/Publicaciones/${post.publicacion_id}/add-like`,
                 { usuario_id: usuarioActivo.usuario_id }
             );
             setLikes(response.data.me_gusta.length); // Actualiza el estado local con la respuesta del backend
@@ -41,7 +41,7 @@ function PostCard({ post, usuarioActivo }) {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://localhost:3005/Comentarios?publicacion_id=${post.publicacion_id}`);
+      const response = await axios.get(`http://localhost:3000/Comentarios?publicacion_id=${post.publicacion_id}`);
       if (response.status === 200) {
         setComments(response.data);
       }
@@ -72,7 +72,7 @@ function PostCard({ post, usuarioActivo }) {
         contenido: newComment,
         fecha_comentario: new Date(),
       };
-      await axios.post('http://localhost:3005/Comentarios', newCommentData);
+      await axios.post('http://localhost:3000/Comentarios', newCommentData);
       setComments([...comments, newCommentData]);
       setNewComment('');
     } catch (error) {
@@ -88,7 +88,7 @@ function PostCard({ post, usuarioActivo }) {
         ...editingComment,
         contenido: editingContent,
       };
-      await axios.put(`http://localhost:3005/Comentarios/${editingComment.comentario_id}`, updatedComment);
+      await axios.put(`http://localhost:3000/Comentarios/${editingComment.comentario_id}`, updatedComment);
       setComments(
         comments.map((comment) =>
           comment.comentario_id === editingComment.comentario_id ? updatedComment : comment
@@ -103,7 +103,7 @@ function PostCard({ post, usuarioActivo }) {
 
   const handleDeleteComment = async (comentarioId) => {
     try {
-      await axios.delete(`http://localhost:3005/Comentarios/${comentarioId}`);
+      await axios.delete(`http://localhost:3000/Comentarios/${comentarioId}`);
       setComments(comments.filter((comment) => comment.comentario_id !== comentarioId));
     } catch (error) {
       console.error('Error al eliminar comentario:', error.message);

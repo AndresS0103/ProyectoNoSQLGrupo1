@@ -21,7 +21,7 @@ function Usuarios() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3002/Usuarios');
+      const response = await axios.get('http://localhost:3000/Usuarios');
       if (response.status === 200) {
         setData(response.data);
       }
@@ -37,7 +37,7 @@ function Usuarios() {
 
   const handleCreate = async () => {
     try {
-      await axios.post('http://localhost:3002/Usuarios', form);
+      await axios.post('http://localhost:3000/Usuarios', form);
       fetchUsers();
       resetForm();
     } catch (err) {
@@ -47,7 +47,7 @@ function Usuarios() {
 
   const handleEdit = async () => {
     try {
-      await axios.put(`http://localhost:3002/Usuarios/${form.usuario_id}`, form);
+      await axios.put(`http://localhost:3000/Usuarios/${form.usuario_id}`, form);
       fetchUsers();
       resetForm();
       setIsEditing(false);
@@ -63,7 +63,7 @@ function Usuarios() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3002/Usuarios/${id}`);
+      await axios.delete(`http://localhost:3000/Usuarios/${id}`);
       fetchUsers();
     } catch (err) {
       console.error('Error al eliminar usuario:', err.message);

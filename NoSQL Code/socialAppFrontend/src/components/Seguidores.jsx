@@ -16,7 +16,7 @@ function Seguidores({ usuarioActivo }) {
   const fetchSeguidores = async (usuarioId) => {
     try {
       // Ajustar la URL para incluir usuarioId como parte de la ruta
-      const response = await axios.get(`http://localhost:3007/Seguidores/${usuarioId}`);
+      const response = await axios.get(`http://localhost:3000/Seguidores/${usuarioId}`);
       if (response.status === 200) {
         setSeguidores(response.data);
         setLoading(false);

@@ -17,7 +17,7 @@ const Sidebar = ({ setUsuarioActivo }) => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await axios.get('http://localhost:3002/Usuarios');
+      const response = await axios.get('http://localhost:3000/Usuarios');
       if (response.status === 200) {
         setUsuarios(response.data);
         const usuarioPorDefecto = response.data[0]; // Seleccionar el primer usuario por defecto

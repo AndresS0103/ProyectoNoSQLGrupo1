@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="content">
           <Sidebar setUsuarioActivo={setUsuarioActivo} />
           <main className="main-feed">

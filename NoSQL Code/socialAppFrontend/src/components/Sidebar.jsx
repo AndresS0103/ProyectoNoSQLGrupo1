@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import userPlaceholder from '../img/user-placeholder.png';
 import '../css/Sidebar.css';
 
 const Sidebar = ({ setUsuarioActivo }) => {
@@ -58,13 +59,13 @@ const Sidebar = ({ setUsuarioActivo }) => {
   }
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar p-3">
       {/* Selector de usuarios */}
-      <div className="user-selector">
+      <div className="user-selector mb-3">
         <select
           value={usuarioSeleccionado?.usuario_id || ''}
           onChange={handleChangeUser}
-          className="user-dropdown"
+          className="form-select"
         >
           {usuarios.map(user => (
             <option key={user.usuario_id} value={user.usuario_id}>
@@ -75,20 +76,21 @@ const Sidebar = ({ setUsuarioActivo }) => {
       </div>
 
       {/* Perfil del usuario */}
-      <div className="profile-section">
+      <div className="profile-section text-center mb-3">
         <img
-          src={usuarioSeleccionado?.foto_perfil || '/placeholder.jpg'}
+          src={usuarioSeleccionado?.foto_perfil ? usuarioSeleccionado.foto_perfil : userPlaceholder}
           alt="Perfil"
-          className="profile-picture"
+          className="profile-picture rounded-circle mb-2"
+          style={{ width: '100px', height: '100px' }}
         />
-        <h2>{usuarioSeleccionado?.nombre}</h2>
-        <p>@{usuarioSeleccionado?.usuario_id}</p>
+        <h2 className="h5">{usuarioSeleccionado?.nombre}</h2>
+        <p className="text-muted">@{usuarioSeleccionado?.usuario_id}</p>
         {usuarioSeleccionado?.biografia && (
           <p className="user-biography">
             <strong>Bio: </strong> {usuarioSeleccionado.biografia}
           </p>
         )}
-        <div className="followers-following">
+        <div className="followers-following d-flex justify-content-around mt-3">
           <p><strong>Seguidores:</strong> {conteoSeguidores}</p>
           <p><strong>Siguiendo:</strong> {conteoSeguidos}</p>
         </div>
@@ -96,18 +98,18 @@ const Sidebar = ({ setUsuarioActivo }) => {
 
       {/* Navegación */}
       <nav className="navigation-menu">
-        <ul>
-          <li>
-            <Link to="/">🏠 Inicio</Link>
+        <ul className="nav flex-column">
+          <li className="nav-item">
+            <Link to="/" className="nav-link">🏠 Inicio</Link>
           </li>
-          <li>
-            <Link to="/usuarios">👥 Usuarios</Link>
+          <li className="nav-item">
+            <Link to="/usuarios" className="nav-link">👥 Usuarios</Link>
           </li>
-          <li>
-            <Link to="/seguidores">👤 Seguidores</Link>
+          <li className="nav-item">
+            <Link to="/seguidores" className="nav-link">👤 Seguidores</Link>
           </li>
-          <li>
-            <Link to="/configuracion">⚙️ Reportes</Link>
+          <li className="nav-item">
+            <Link to="/configuracion" className="nav-link">⚙️ Reportes</Link>
           </li>
         </ul>
       </nav>

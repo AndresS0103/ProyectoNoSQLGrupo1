@@ -1,29 +1,171 @@
 .seguidores-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header */
+.seguidores-header {
+  padding: 16px;
+  border-bottom: 1px solid #dbdbdb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seguidores-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  color: #262626;
+}
+
+/* Barra de búsqueda */
+.search-container {
+  padding: 8px 16px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  background-color: #efefef;
+  font-size: 14px;
+}
+
+.search-input::placeholder {
+  color: #8e8e8e;
+}
+
+/* Lista de seguidores */
+.seguidores-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.seguidores-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #dbdbdb;
+  transition: background-color 0.2s;
+}
+
+.seguidores-item:hover {
+  background-color: #fafafa;
+}
+
+.profile-pic {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.seguidor-info {
+  flex: 1;
+}
+
+.seguidor-info strong {
+  display: block;
+  font-size: 14px;
+  color: #262626;
+  margin-bottom: 2px;
+}
+
+.seguidor-info p {
+  font-size: 14px;
+  color: #8e8e8e;
+  margin: 0;
+}
+
+.remove-button {
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  color: #262626;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-button:hover {
+  background-color: #fafafa;
+  border-color: #8e8e8e;
+}
+
+/* Mensaje de no seguidores */
+.no-followers {
+  padding: 24px 16px;
+  text-align: center;
+  color: #8e8e8e;
+  font-size: 14px;
+}
+
+/* Scrollbar personalizado */
+.seguidores-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.seguidores-list::-webkit-scrollbar-track {
+  background: #fafafa;
+}
+
+.seguidores-list::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 4px;
+}
+
+.seguidores-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 480px) {
+  .seguidores-container {
+    max-width: 100%;
+    border-radius: 0;
   }
-  
-  .seguidores-container h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #333;
+}
+
+/* Estilos para la notificación */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: #323232;
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
   }
-  
-  .seguidores-list {
-    list-style: none;
-    padding: 0;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  .seguidores-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .seguidores-list li strong {
-    display: block;
-    color: #555;
-  }
-  
+}

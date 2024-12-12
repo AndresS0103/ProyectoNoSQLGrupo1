@@ -6,6 +6,8 @@ function Seguidores({ usuarioActivo }) {
   const [seguidores, setSeguidores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     if (usuarioActivo) {
@@ -15,8 +17,7 @@ function Seguidores({ usuarioActivo }) {
 
   const fetchSeguidores = async (usuarioId) => {
     try {
-      // Ajustar la URL para incluir usuarioId como parte de la ruta
-      const response = await axios.get(`http://localhost:3000/Seguidores/${usuarioId}`);
+      const response = await axios.get(`http://localhost:3000/usuarios/${usuarioId}/seguidores`);
       if (response.status === 200) {
         setSeguidores(response.data);
         setLoading(false);
@@ -26,6 +27,33 @@ function Seguidores({ usuarioActivo }) {
       setLoading(false);
     }
   };
+
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(''), 3000); // La notificación desaparece después de 3 segundos
+  };
+
+  const handleRemove = async (seguidorId) => {
+    try {
+      const response = await axios.post('http://localhost:3000/usuarios/unfollow', {
+        usuarioId: seguidorId,
+        seguidoId: usuarioActivo.usuario_id
+      });
+
+      if (response.status === 200) {
+        showNotification('Seguidor removido exitosamente');
+        setSeguidores(prevSeguidores => 
+          prevSeguidores.filter(seguidor => seguidor.usuario_id !== seguidorId)
+        );
+      }
+    } catch (err) {
+      showNotification('Error al remover seguidor');
+    }
+  };
+
+  const filteredSeguidores = seguidores.filter(seguidor =>
+    seguidor.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (!usuarioActivo) {
     return <div className="seguidores-container">Por favor selecciona un usuario.</div>;
@@ -41,18 +69,53 @@ function Seguidores({ usuarioActivo }) {
 
   return (
     <div className="seguidores-container">
-      <h2>Seguidores de {usuarioActivo.nombre}</h2>
-      {seguidores.length === 0 ? (
-        <p className="no-followers">Este usuario no tiene seguidores.</p>
+      <div className="seguidores-header">
+        <h2>Followers</h2>
+        <button className="close-button">&times;</button>
+      </div>
+
+      <div className="search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {filteredSeguidores.length === 0 ? (
+        <p className="no-followers">
+          {searchTerm ? "No results found." : "Este usuario no tiene seguidores."}
+        </p>
       ) : (
         <ul className="seguidores-list">
-          {seguidores.map((seguidor) => (
-            <li key={seguidor.seguidor_id}>
-              <strong>Usuario ID:</strong> {seguidor.seguido_id}
-              <p><strong>Fecha:</strong> {new Date(seguidor.fecha_seguimiento).toLocaleDateString()}</p>
+          {filteredSeguidores.map((seguidor) => (
+            <li key={seguidor.usuario_id} className="seguidores-item">
+              <img
+                src={seguidor.foto_perfil || 'https://via.placeholder.com/50'}
+                alt="Foto de perfil"
+                className="profile-pic"
+              />
+              <div className="seguidor-info">
+                <strong>{seguidor.nombre}</strong>
+                <p>{seguidor.email}</p>
+              </div>
+              <button
+                className="remove-button"
+                onClick={() => handleRemove(seguidor.usuario_id)}
+              >
+                Remove
+              </button>
             </li>
           ))}
         </ul>
+      )}
+      
+      {notification && (
+        <div className="notification">
+          {notification}
+        </div>
       )}
     </div>
   );

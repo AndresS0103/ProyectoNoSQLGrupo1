@@ -6,6 +6,8 @@ import Usuarios from './components/Usuarios';
 import Sidebar from './components/Sidebar';
 import Reporte from './components/Reporte'; 
 import Seguidores from './components/Seguidores';
+import Seguir from './components/Seguir';
+import Reportes from './components/Reportes';
 import './css/App.css';
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
               <Route path="/usuarios" element={<Usuarios />} />
               <Route path="/reportar" element={<Reporte usuarioActivo={usuarioActivo} />} /> {}
               <Route path="/seguidores" element={<Seguidores usuarioActivo={usuarioActivo} />} />
+              <Route path="/seguir" element={<Seguir usuarioActivo={usuarioActivo} />} />
+              <Route path="/reportes" element={<Reportes />} />
             </Routes>
           </main>
         </div>

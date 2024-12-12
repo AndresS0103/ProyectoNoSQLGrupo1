@@ -44,7 +44,7 @@ const Sidebar = ({ setUsuarioActivo }) => {
   };
 
   const handleChangeUser = (event) => {
-    const usuario = usuarios.find(user => user.usuario_id === event.target.value);
+    const usuario = usuarios.find((user) => user.usuario_id === event.target.value);
     setUsuarioSeleccionado(usuario);
     setUsuarioActivo(usuario);
     actualizarConteos(usuario);
@@ -67,7 +67,7 @@ const Sidebar = ({ setUsuarioActivo }) => {
           onChange={handleChangeUser}
           className="form-select"
         >
-          {usuarios.map(user => (
+          {usuarios.map((user) => (
             <option key={user.usuario_id} value={user.usuario_id}>
               {user.nombre}
             </option>
@@ -91,8 +91,12 @@ const Sidebar = ({ setUsuarioActivo }) => {
           </p>
         )}
         <div className="followers-following d-flex justify-content-around mt-3">
-          <p><strong>Seguidores:</strong> {conteoSeguidores}</p>
-          <p><strong>Siguiendo:</strong> {conteoSeguidos}</p>
+          <p>
+            <strong>Seguidores:</strong> {conteoSeguidores}
+          </p>
+          <p>
+            <strong>Siguiendo:</strong> {conteoSeguidos}
+          </p>
         </div>
       </div>
 
@@ -100,16 +104,29 @@ const Sidebar = ({ setUsuarioActivo }) => {
       <nav className="navigation-menu">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <Link to="/" className="nav-link">🏠 Inicio</Link>
+            <Link to="/" className="nav-link">
+              🏠 Inicio
+            </Link>
           </li>
           <li className="nav-item">
-            <Link to="/usuarios" className="nav-link">👥 Usuarios</Link>
+            <Link to="/usuarios" className="nav-link">
+              👥 Usuarios
+            </Link>
           </li>
           <li className="nav-item">
-            <Link to="/seguidores" className="nav-link">👤 Seguidores</Link>
+            <Link to="/seguidores" className="nav-link">
+              👤 Seguidores
+            </Link>
           </li>
           <li className="nav-item">
-            <Link to="/configuracion" className="nav-link">⚙️ Reportes</Link>
+            <Link to="/reportes" className="nav-link"> {/* Cambiado de "/configuracion" a "/reportes" */}
+              ⚙️ Reportes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/seguir" className="nav-link">
+              ➕ Seguir
+            </Link>
           </li>
         </ul>
       </nav>

@@ -128,6 +128,14 @@ const Sidebar = ({ setUsuarioActivo }) => {
               ➕ Seguir
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/notificaciones" className="nav-link">
+              🔔 Notificaciones
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/chat" className="nav-link">💬 Chat</Link>
+          </li>
         </ul>
       </nav>
     </aside>

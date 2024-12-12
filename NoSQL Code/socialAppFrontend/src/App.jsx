@@ -8,6 +8,8 @@ import Reporte from './components/Reporte';
 import Seguidores from './components/Seguidores';
 import Seguir from './components/Seguir';
 import Reportes from './components/Reportes';
+import Notificaciones from './components/Notificaciones';
+import Chat from './components/Chat';
 import './css/App.css';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
               <Route path="/seguidores" element={<Seguidores usuarioActivo={usuarioActivo} />} />
               <Route path="/seguir" element={<Seguir usuarioActivo={usuarioActivo} />} />
               <Route path="/reportes" element={<Reportes />} />
+              <Route path="/notificaciones" element={<Notificaciones usuarioActivo={usuarioActivo} />} />
+              <Route path="/chat" element={<Chat usuarioActivo={usuarioActivo} />} />
             </Routes>
           </main>
         </div>

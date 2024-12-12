@@ -1,0 +1,211 @@
+/* Contenedor principal */
+.notificaciones-container {
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    color: #262626;
+    margin: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Encabezado */
+  .notificaciones-container h2 {
+    font-size: 24px;
+    font-weight: 700;
+    padding: 20px 24px;
+    margin: 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #262626;
+    letter-spacing: -0.5px;
+  }
+  
+  /* Lista de notificaciones */
+  .notificaciones-list {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .notificacion-item {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .notificacion-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .notificacion-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Cada elemento de notificación */
+  .notificacion-item p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #4a4a4a;
+    display: flex;
+    align-items: center;
+    line-height: 1.5;
+  }
+  
+  .notificacion-item strong {
+    color: #262626;
+    font-weight: 600;
+    margin-right: 8px;
+    min-width: 80px;
+  }
+  
+  /* Estado no leído */
+  .notificacion-item.unread {
+    background-color: #f0f7ff;
+  }
+  
+  .notificacion-item.unread:hover {
+    background-color: #e6f2ff;
+  }
+  
+  /* Botón de eliminar */
+  .delete-button {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .notificacion-item:hover .delete-button {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .delete-button:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+  }
+  
+  /* Tipos de notificación */
+  .notificacion-tipo {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background-color: #f0f2f5;
+    color: #4a4a4a;
+    margin-top: 8px;
+  }
+  
+  /* Estado de leído */
+  .leido-badge {
+    width: 8px;
+    height: 8px;
+    background-color: #0095f6;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 8px;
+  }
+  
+  /* Mensaje de no notificaciones */
+  .no-notificaciones {
+    padding: 40px 24px;
+    text-align: center;
+    color: #8e8e8e;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .no-notificaciones::before {
+    content: "🔔";
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  
+  /* Estados de carga y error */
+  .loading-state,
+  .error-state {
+    padding: 32px 24px;
+    text-align: center;
+    color: #8e8e8e;
+    font-size: 15px;
+  }
+  
+  .error-state {
+    color: #dc3545;
+    background-color: #fff5f5;
+  }
+  
+  /* Scrollbar personalizado */
+  .notificaciones-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .notificaciones-list::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  .notificaciones-list::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 6px;
+  }
+  
+  .notificaciones-list::-webkit-scrollbar-thumb:hover {
+    background: #c0c0c0;
+  }
+  
+  /* Diseño responsivo */
+  @media (max-width: 640px) {
+    .notificaciones-container {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  
+    .notificacion-item {
+      padding: 16px;
+    }
+  
+    .delete-button {
+      opacity: 1;
+      visibility: visible;
+      right: 16px;
+    }
+  }
+  
+  /* Animaciones */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .notificacion-item {
+    animation: fadeIn 0.3s ease-out forwards;
+  }

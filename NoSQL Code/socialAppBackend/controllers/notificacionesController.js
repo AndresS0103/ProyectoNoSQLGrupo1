@@ -3,12 +3,22 @@ import Notificaciones from '../models/notificaciones.js';
 // Ruta GET para obtener todas las notificaciones
 export const getAllNotificaciones = async (req, res) => {
     try {
-        const notificaciones = await Notificaciones.find();
-        res.json(notificaciones);
+      const { usuario_id } = req.query;
+  
+      let notificaciones;
+      if (usuario_id) {
+        // Filtrar notificaciones por usuario_id
+        notificaciones = await Notificaciones.find({ usuario_id });
+      } else {
+        // Obtener todas las notificaciones
+        notificaciones = await Notificaciones.find();
+      }
+  
+      res.json(notificaciones);
     } catch (error) {
-        res.status(500).json({ message: "Error al obtener las notificaciones: " + error.message });
+      res.status(500).json({ message: "Error al obtener las notificaciones: " + error.message });
     }
-};
+  };
 
 // Ruta GET para obtener una notificación por ID
 export const getNotificacionById = async (req, res) => {

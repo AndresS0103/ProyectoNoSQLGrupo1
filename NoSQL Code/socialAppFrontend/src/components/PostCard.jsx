@@ -17,6 +17,8 @@ function PostCard({ post, usuarioActivo }) {
 	const [showReactions, setShowReactions] = useState(false);
 	const navigate = useNavigate();
 	const [hoverTimeout, setHoverTimeout] = useState(null);
+	const [showProfileModal, setShowProfileModal] = useState(false);
+    const [profileData, setProfileData] = useState(null);
 
 	const handleMouseEnter = () => {
 		if (hoverTimeout) {
@@ -155,6 +157,19 @@ function PostCard({ post, usuarioActivo }) {
 	};
 
 	const handleCloseModal = () => setShowModal(false);
+    const handleCloseProfileModal = () => setShowProfileModal(false);
+
+	const handleShowProfile = async (usuarioId) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/Usuarios/${usuarioId}`);
+            if (response.status === 200) {
+                setProfileData(response.data);
+                setShowProfileModal(true);
+            }
+        } catch (error) {
+            console.error('Error al obtener la información del usuario:', error.message);
+        }
+    };
 
 	return (
 		<div className="post-card">
@@ -163,7 +178,7 @@ function PostCard({ post, usuarioActivo }) {
 				<span className="user-id">{post.usuario_id}</span>
 				<DropdownButton id="dropdown-basic-button" title="⋮" variant="outline-secondary" className="ms-auto">
 					<Dropdown.Item onClick={() => handleReport('publicacion')}>🚩 Reportar Publicación</Dropdown.Item>
-					<Dropdown.Item onClick={() => navigate(`/perfil/${post.usuario_id}`)}>👤 Ver Información del Perfil</Dropdown.Item>
+					<Dropdown.Item onClick={() => handleShowProfile(post.usuario_id)}>👤 Ver Información del Perfil</Dropdown.Item>
 					<Dropdown.Item onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
 						📲 Compartir en WhatsApp
 					</Dropdown.Item>
@@ -263,6 +278,30 @@ function PostCard({ post, usuarioActivo }) {
 					</div>
 				</Modal.Body>
 			</Modal>
+			<Modal show={showProfileModal} onHide={handleCloseProfileModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Información del Perfil</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {profileData ? (
+                        <div>
+                            <img src={profileData.foto_perfil || userPlaceholder} alt="Perfil" className="user-avatar mb-3" />
+                            <p><strong>Nombre:</strong> {profileData.nombre}</p>
+                            <p><strong>Email:</strong> {profileData.email}</p>
+                            <p><strong>Biografía:</strong> {profileData.biografia}</p>
+                            <p><strong>Seguidores:</strong> {profileData.seguidores.length}</p>
+                            <p><strong>Siguiendo:</strong> {profileData.seguidos.length}</p>
+                        </div>
+                    ) : (
+                        <p>Cargando información del perfil...</p>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleCloseProfileModal}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 		</div>
 	);
 }
